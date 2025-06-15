@@ -5,8 +5,17 @@ async function fetchJordanMatches() {
   const url = 'https://site.web.api.espn.com/apis/site/v2/sports/soccer/all/teams/2917/schedule?region=us&lang=en&seasontype=2';
 
   try {
+    console.log("🚀 بدء الاتصال بـ ESPN...");
     const res = await fetch(url);
+    console.log("🔄 تم الاتصال، جاري قراءة البيانات...");
     const data = await res.json();
+
+    if (!data.events || !Array.isArray(data.events)) {
+      console.error("❌ البيانات غير متوقعة أو لا تحتوي على مباريات.");
+      return;
+    }
+
+    console.log(`📦 عدد المباريات المستلمة: ${data.events.length}`);
 
     const matches = data.events.map(e => {
       const comp = e.competitions[0];
@@ -25,10 +34,11 @@ async function fetchJordanMatches() {
       };
     });
 
+    console.log("✅ المباريات تم تحويلها بنجاح. جاري حفظها في matches.json...");
     fs.writeFileSync('matches.json', JSON.stringify(matches, null, 2), 'utf8');
-    console.log('✅ تم تحديث matches.json');
+    console.log('🎉 تم حفظ المباريات في matches.json');
   } catch (error) {
-    console.error('❌ فشل التحديث:', error);
+    console.error('❌ حصل خطأ أثناء جلب المباريات:', error);
   }
 }
 
