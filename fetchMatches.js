@@ -1,21 +1,35 @@
-import fetch from 'node-fetch';
-import fs from 'fs';
+const fetch = require('node-fetch');
+const fs = require('fs');
 
-async function fetchJordan() {
-  const res = await fetch('https://site.web.api.espn.com/apis/site/v2/sports/soccer/all/teams/2917/schedule?fixture=true');
-  const json = await res.json();
-  return json.events.map(e => ({
-    date: new Date(e.date).toISOString().split('T')[0],
-    time: new Date(e.date).toLocaleTimeString('ar-JO', {hour:'2-digit', minute:'2-digit'}),
-    home: e.competitions[0].competitors.find(c => c.homeAway==='home').team.name,
-    away: e.competitions[0].competitors.find(c => c.homeAway==='away').team.name,
-    venue: e.competitions[0].venue.fullName,
-    type: e.competitions[0].competition.name,
-    status: e.status.type.name
-  }));
+async function fetchJordanMatches() {
+  const url = 'https://site.web.api.espn.com/apis/site/v2/sports/soccer/all/teams/2917/schedule?region=us&lang=en&seasontype=2';
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const matches = data.events.map(e => {
+      const comp = e.competitions[0];
+      const home = comp.competitors.find(c => c.homeAway === 'home');
+      const away = comp.competitors.find(c => c.homeAway === 'away');
+
+      return {
+        date: new Date(e.date).toISOString().split('T')[0],
+        time: new Date(e.date).toLocaleTimeString('ar-JO', { hour: '2-digit', minute: '2-digit' }),
+        home: home.team.displayName,
+        away: away.team.displayName,
+        venue: comp.venue?.fullName || 'غير معروف',
+        type: comp.competition?.name || 'ودية',
+        status: e.status?.type?.name || 'SCHEDULED',
+        score: comp.status?.type?.name === 'STATUS_FINAL' ? comp.competitors.map(c => c.score).join(' - ') : undefined
+      };
+    });
+
+    fs.writeFileSync('matches.json', JSON.stringify(matches, null, 2), 'utf8');
+    console.log('✅ تم تحديث matches.json');
+  } catch (error) {
+    console.error('❌ فشل التحديث:', error);
+  }
 }
 
-(async () => {
-  const m = await fetchJordan();
-  fs.writeFileSync('matches.json', JSON.stringify(m, null, 2), 'utf8');
-})();
+fetchJordanMatches();
