@@ -2,8 +2,8 @@ name: Update matches
 
 on:
   schedule:
-    - cron: '0 */12 * * *'  # يحدث تلقائيًا كل 12 ساعة
-  workflow_dispatch:         # يسمح بالتشغيل اليدوي
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
 
 jobs:
   update:
@@ -32,4 +32,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add matches.json
           git commit -m "🔄 تحديث تلقائي للمباريات"
-          git push
+          git push origin main
