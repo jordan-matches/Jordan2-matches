@@ -2,25 +2,34 @@ name: Update matches
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # يوميًا الساعة 2 صباحًا UTC
-  workflow_dispatch:
+    - cron: '0 */12 * * *'  # يحدث تلقائيًا كل 12 ساعة
+  workflow_dispatch:         # يسمح بالتشغيل اليدوي
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-      - name: إعداد Node.js
+
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm install node-fetch@2
-      - name: تشغيل السكربت
+
+      - name: Install dependencies
+        run: npm install node-fetch@2
+
+      - name: Run fetch script
         run: node fetchMatches.js
-      - name: حفظ التغييرات
+
+      - name: Pull latest before push
+        run: git pull origin main --rebase
+
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add matches.json
-          git commit -m "تحديث تلقائي للمباريات"
+          git commit -m "🔄 تحديث تلقائي للمباريات"
           git push
