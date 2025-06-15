@@ -2,7 +2,7 @@ name: Update matches
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * *'  # يوميًا الساعة 2 صباحًا UTC
   workflow_dispatch:
 
 jobs:
@@ -10,18 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js
+      - name: إعداد Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: npm install node-fetch@2
-      - run: node fetchMatches.js
-      - run: |
+      - name: تشغيل السكربت
+        run: node fetchMatches.js
+      - name: حفظ التغييرات
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add matches.json
-          git commit -m "Update matches.json"
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git commit -m "تحديث تلقائي للمباريات"
+          git push
