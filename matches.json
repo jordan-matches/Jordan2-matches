@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "date": "2024-06-11",
+    "time": "٠٦:٠٠ م",
+    "home": "Saudi Arabia",
+    "away": "Jordan",
+    "venue": "Al-Awwal Park",
+    "type": "ودية",
+    "status": "SCHEDULED"
+  },
+  {
+    "date": "2024-06-06",
+    "time": "٠٥:٣٠ م",
+    "home": "Jordan",
+    "away": "Tajikistan",
+    "venue": "Amman International Stadium",
+    "type": "ودية",
+    "status": "SCHEDULED"
+  },
+  {
+    "date": "2024-03-26",
+    "time": "٠٧:٠٠ م",
+    "home": "Jordan",
+    "away": "Pakistan",
+    "venue": "Amman International Stadium",
+    "type": "ودية",
+    "status": "SCHEDULED"
+  },
+  {
+    "date": "2024-03-21",
+    "time": "٠٩:٠٠ ص",
+    "home": "Pakistan",
+    "away": "Jordan",
+    "venue": "Jinnah Stadium",
+    "type": "ودية",
+    "status": "SCHEDULED"
+  },
+  {
+    "date": "2024-01-29",
+    "time": "١١:٣٠ ص",
+    "home": "Iraq",
+    "away": "Jordan",
+    "venue": "Khalifa International Stadium",
+    "type": "ودية",
+    "status": "SCHEDULED"
+  }
+]
